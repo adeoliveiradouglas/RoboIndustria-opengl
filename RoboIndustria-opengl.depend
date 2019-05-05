@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1557094860 source:d:\roboindustria-opengl\main.cpp
+	<GL/glut.h>
+	<stdio.h>
+	<stdlib.h>
+	<vector>
+
