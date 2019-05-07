@@ -7,7 +7,6 @@
 #include <stdlib.h>
 #include <vector>
 
-#define taxaMovimento 2
 #define distanciaCamera 40
 #define limMinEixo -1000
 #define limMaxEixo 1000
@@ -23,7 +22,8 @@ typedef struct{
 } Quadrado;
 
 
-GLdouble posX= 0, posY = 0, posZ = 0, //posição do personagem
+GLdouble angulo = 0, taxaMovimento = 2,
+         posX= 0, posY = 0, posZ = 0, //posição do personagem
          posCamX= 0, posCamY = -1*distanciaCamera, posCamZ = 440, //posição da câmera
          posCamLookX= 0, posCamLookY = distanciaCamera, posCamLookZ = 0; //posição do foco da camera, a frente do personagem
 int linRobo=3, colRobo=2;
@@ -48,27 +48,50 @@ void moverBaixo()
 {
      posY -= taxaMovimento;
      posCamX = posX;
+     posCamY = posY - distanciaCamera;
+     posCamLookX = posCamX;
+     posCamLookY = posCamY + distanciaCamera;
+     /*
+     posCamX = posX;
      posCamY = posY + distanciaCamera;
      posCamLookX = posCamX;
-     posCamLookY = posCamY - distanciaCamera*2;
+     posCamLookY = posCamY - distanciaCamera*2;*/
 }
 
 void moverEsquerda()
 {
+     //angulo--;
+
+     // trava a câmera olhando sempre para a frente
      posX -= taxaMovimento;
+     posCamX = posX;
+     posCamY = posY - distanciaCamera;
+     posCamLookX = posCamX;
+     posCamLookY = posCamY + distanciaCamera*2;
+
+     /* move camera na direção que anda (MÓ BIZARRO KKK)
      posCamY = posY;
      posCamX = posX + distanciaCamera;
      posCamLookX = posCamX - distanciaCamera*2;
-     posCamLookY = posCamY;
+     posCamLookY = posCamY;*/
 }
 
 void moverDireita()
 {
+     //angulo++;
+
+     // trava a câmera olhando sempre para a frente
      posX += taxaMovimento;
+     posCamX = posX;
+     posCamY = posY - distanciaCamera;
+     posCamLookX = posCamX;
+     posCamLookY = posCamY + distanciaCamera*2;
+
+     /* move camera na direção que anda (MÓ BIZARRO KKK)
      posCamY = posY;
      posCamX = posX - distanciaCamera;
      posCamLookX = posCamX + distanciaCamera*2;
-     posCamLookY = posCamY;
+     posCamLookY = posCamY;*/
 }
 
 void resetarPosCamera()
@@ -143,7 +166,15 @@ void teclado (unsigned char key, int x, int y)
                resetarPosCamera();
                break;
 
-          default:
+          case '+':
+               taxaMovimento++;
+               break;
+
+          case '-':
+               taxaMovimento--;
+               break;
+
+          case 'q':
                exit(0);
                break;
 	}
@@ -210,16 +241,19 @@ void desenharEixos()
 
 void desenharPersonagem()
 {
+
      glColor3f(0.0f, 0.5f, 1.0f);
 
-     int t =25;
+     GLdouble t = 50, t2 = t/2;
 
      glLineWidth(2);
 
+     glRotated(0, 0, 0, 1);
      glTranslated(posX,posY,posZ);
-     glutWireCube(20);
+     glutWireCube(t);
+
      glTranslated(0,0,0);
-   /*  glBegin(GL_POLYGON);
+     /*  glBegin(GL_POLYGON);
           glVertex3f(posX-t,posY-t,posZ);   // v0
           glVertex3f(posX+t,posY-t,posZ);   // v1
           glVertex3f(posX+t,posY+t,posZ);   // v2
@@ -245,12 +279,15 @@ void desenharPersonagem()
 
 
      glEnd();*/
+     glFlush();
 }
 
 void cenarioX()
 {
 
   glClear(GL_COLOR_BUFFER_BIT);
+  glRotated(angulo,0,0,1);
+
   float cor1 = 0.7;
   float cor2 = 0.9;
   int corAtual = 1;
@@ -285,7 +322,6 @@ void cenarioX()
           glVertex2f(xd,ys);   // v2
           glVertex2f(xe,ys);   // v3
           glEnd();
-
       }
 
           if (corAtual == 1)
@@ -299,9 +335,10 @@ void cenarioX()
              corAtual = 1;
           }
 
-  }
+     }
+     cenario();
 
-  glFlush();
+     glFlush();
 }
 
 //desenha os objetos
