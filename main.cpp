@@ -179,11 +179,19 @@ void desenharEixos()
      glEnd();
 
      //eixo Z azul
+     glColor3f(0.0f, 0.0f, 1.0f);
+
+     glBegin(GL_LINES);
+          glVertex3i(0,0,0);
+          glVertex3i(0,0,limMaxEixo);
+     glEnd();
+
+     //eixo Z azul completo
 //     glColor3f(0.0f, 0.0f, 1.0f);
 //
 //     glBegin(GL_LINES);
 //          glVertex3i(0,0,limMinEixo);
-//          glVertex3i(0,0,0);
+//          glVertex3i(0,0,limMaxEixo);
 //     glEnd();
 }
 
@@ -259,6 +267,7 @@ void cenarioX()
 //desenha os objetos
 void acao(void)
 {
+     //log das posições
      printf("X: %.2f Y: %.2f Z: %.2f\n",(float) posX, (float) posY, (float) posZ);
      printf("Xc: %.2f Yc: %.2f Zc: %.2f\n",(float) posCamX, (float) posCamY, (float) posCamZ);
 
@@ -268,30 +277,18 @@ void acao(void)
      glLoadIdentity();
      gluLookAt(posCamX,posCamY,posCamZ, posCamX,posCamY,0, 0,1,0);
 
-
-
-     //desenha objetos
-     //cenario();
- glColor3f(0.0f, 0.0f, 1.0f);
+     //desenha parte de trás do eixo z para ficar por trás do personagem
+     glColor3f(0.0f, 0.0f, 1.0f);
      glBegin(GL_LINES);
           glVertex3i(0,0,limMinEixo);
           glVertex3i(0,0,0);
      glEnd();
 
      desenharPersonagem();
+
+     //desenha os eixos XY e a frente do Z
      desenharEixos();
 
-
-// Desenha linhas com nova espessura
-
-
-     //eixo Z azul
-     glColor3f(0.0f, 0.0f, 1.0f);
-
-     glBegin(GL_LINES);
-          glVertex3i(0,0,0);
-          glVertex3i(0,0,limMaxEixo);
-     glEnd();
      glFlush();
 }
 
