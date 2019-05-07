@@ -8,7 +8,7 @@
 #include <vector>
 
 #define taxaMovimento 2
-#define distanciaCamera 10
+#define distanciaCamera 30
 #define limMinEixo -1000
 #define limMaxEixo 1000
 #define maxZoom 640
@@ -24,7 +24,7 @@ typedef struct{
 
 GLdouble posX= 0, posY = 0, posZ = 0, //posição do personagem
          posCamX= 0, posCamY = 0, posCamZ = 200, //posição da câmera
-         posCamLookX= 0, posCamLookY = 0, posCamLookZ = 0; //posição do foco da camera, a frente do personagem
+         posCamLookX= 0, posCamLookY = 3*distanciaCamera, posCamLookZ = 0; //posição do foco da camera, a frente do personagem
 int linRobo=3, colRobo=2;
 float limInf = -190;
 float limEsq = -190;
@@ -39,6 +39,8 @@ void moverCima()
      posY += taxaMovimento;
      posCamX = posX;
      posCamY = posY - distanciaCamera;
+     posCamLookX = posCamX;
+     posCamLookY = posCamY + distanciaCamera * 3;
 }
 
 void moverBaixo()
@@ -46,6 +48,8 @@ void moverBaixo()
      posY -= taxaMovimento;
      posCamX = posX;
      posCamY = posY + distanciaCamera;
+     posCamLookX = posCamX;
+     posCamLookY = posCamY - distanciaCamera * 3;
 }
 
 void moverEsquerda()
@@ -53,6 +57,8 @@ void moverEsquerda()
      posX -= taxaMovimento;
      posCamY = posY;
      posCamX = posX + distanciaCamera;
+     posCamLookX = posCamX + distanciaCamera * 3;
+     posCamLookY = posCamY;
 }
 
 void moverDireita()
@@ -60,6 +66,8 @@ void moverDireita()
      posX += taxaMovimento;
      posCamY = posY;
      posCamX = posX - distanciaCamera;
+     posCamLookX = posCamX + distanciaCamera * 3;
+     posCamLookY = posCamY;
 }
 
 void resetarPosCamera()
@@ -184,31 +192,45 @@ void desenharEixos()
 
      //eixo Z azul
      glColor3f(0.0f, 0.0f, 1.0f);
-//
-//     glBegin(GL_LINES);
-//          glVertex3i(0,0,0);
-//          glVertex3i(0,0,limMaxEixo);
-//     glEnd();
+
+     glBegin(GL_LINES);
+          glVertex3i(0,0,0);
+          glVertex3i(0,0,limMaxEixo);
+     glEnd();
 
      //eixo Z azul completo
 //     glColor3f(0.0f, 0.0f, 1.0f);
 //
-     glBegin(GL_LINES);
-          glVertex3i(0,0,limMinEixo);
-          glVertex3i(0,0,limMaxEixo);
-     glEnd();
+//     glBegin(GL_LINES);
+//          glVertex3i(0,0,limMinEixo);
+//          glVertex3i(0,0,limMaxEixo);
+//     glEnd();
 }
 
 void desenharPersonagem()
 {
-     glColor3f (0.5,0.5,0);
-int t =25;
+
+
+     int t =25;
 
      glBegin(GL_POLYGON);
           glVertex3f(posX-t,posY-t,posZ);   // v0
           glVertex3f(posX+t,posY-t,posZ);   // v1
-          glVertex3f(posX+t,posY+t,posZ);   // vt
+          glVertex3f(posX+t,posY+t,posZ);   // v2
           glVertex3f(posX-t,posY+t,posZ);   // v3
+
+
+          glVertex3f(posX-t,posY-t,posZ+t);   // v0
+          glVertex3f(posX+t,posY-t,posZ+t);   // v1
+          glVertex3f(posX+t,posY+t,posZ+t);   // v2
+          glVertex3f(posX-t,posY+t,posZ+t);   // v3
+
+          glVertex3f(posX-t,posY-t,posZ);   // v0
+          glVertex3f(posX+t,posY-t,posZ);   // v1
+          glVertex3f(posX-t,posY-t,posZ+t);   // v0
+          glVertex3f(posX+t,posY-t,posZ+t);   // v1
+
+
      glEnd();
 }
 
@@ -283,11 +305,11 @@ void acao(void)
      gluLookAt(posCamX,posCamY,posCamZ, posCamX,posCamY,0, 0,1,0);
 
      //desenha parte de trás do eixo z para ficar por trás do personagem
-//     glColor3f(0.0f, 0.0f, 1.0f);
-//     glBegin(GL_LINES);
-//          glVertex3i(0,0,limMinEixo);
-//          glVertex3i(0,0,0);
-//     glEnd();
+     glColor3f(0.0f, 0.0f, 1.0f);
+     glBegin(GL_LINES);
+          glVertex3i(0,0,limMinEixo);
+          glVertex3i(0,0,0);
+     glEnd();
 
      //a partir daqui desenha todos os elementos
      cenarioX();
