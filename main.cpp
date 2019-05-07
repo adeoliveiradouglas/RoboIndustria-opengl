@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <vector>
 
-#define taxaMovimento 0.15
+#define taxaMovimento 0.3
 #define distanciaCamera 0.5
 #define limMinEixo -1000
 #define limMaxEixo 1000
@@ -37,24 +37,28 @@ std::vector<Quadrado> objetos;
 void moverCima()
 {
      posY += taxaMovimento;
+     posCamX = posX;
      posCamY = posY - distanciaCamera;
 }
 
 void moverBaixo()
 {
      posY -= taxaMovimento;
+     posCamX = posX;
      posCamY = posY + distanciaCamera;
 }
 
 void moverEsquerda()
 {
      posX -= taxaMovimento;
+     posCamY = posY;
      posCamX = posX + distanciaCamera;
 }
 
 void moverDireita()
 {
      posX += taxaMovimento;
+     posCamY = posY;
      posCamX = posX - distanciaCamera;
 }
 
@@ -284,11 +288,20 @@ void acao(void)
           glVertex3i(0,0,0);
      glEnd();
 
+     //a partir daqui desenha todos os elementos
+     cenarioX();
      desenharPersonagem();
+<<<<<<< refs/remotes/origin/master
 
      //desenha os eixos XY e a frente do Z
      desenharEixos();
 
+=======
+
+     //desenha os eixos XY e a frente do Z
+     desenharEixos();
+
+>>>>>>> Update main.cpp
      glFlush();
 }
 
